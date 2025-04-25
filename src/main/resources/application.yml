@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/ct
+    username: postgres
+  application:
+    name: coursetracker

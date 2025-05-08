@@ -13,3 +13,5 @@ spring:
     username: postgres
   application:
     name: coursetracker
+#server:
+#  port: 3333

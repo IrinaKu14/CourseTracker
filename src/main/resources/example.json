@@ -1,0 +1,16 @@
+{
+  "bookstore": "Hello, world!",
+  "value": 45,
+  "array": [1,2,3],
+  "name": [
+    {
+      "name": "Irina",
+      "age": 27,
+      "avgmark": 5
+    },
+    {
+
+    },
+    {}
+  ]
+}

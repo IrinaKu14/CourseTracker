@@ -1,6 +1,7 @@
 package ru.jafix.ct.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name="users")
 public class User {
     @Id
@@ -19,18 +21,18 @@ public class User {
     private String login;
     @Column(name="user_age") //-- переопределение названия колонки в БД
     private int age;
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-//    @ManyToMany
-//    private List<Role> role;
+//    @ManyToOne
+//    @JoinColumn(name = "role_id")
+//    private Role role;
+    @ManyToMany
+    private List<Role> role;
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", login='" + login + '\'' +
-//                ", age=" + age +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

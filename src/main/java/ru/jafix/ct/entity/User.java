@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Builder
 @Table(name="users")
-public class User {
+public class User implements Responsable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

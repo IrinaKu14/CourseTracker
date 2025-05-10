@@ -31,6 +31,10 @@ public class UserService {
 
     //изменить пользователя
     public User editUser(UserDto userDto) {
+        if(userDto.getId()== null){
+            throw new IllegalArgumentException("id пользователя при изменении обязателен");
+
+        }
         User userForCreater = User.builder()
                 .id(userDto.getId())
                 .age(userDto.getAge())

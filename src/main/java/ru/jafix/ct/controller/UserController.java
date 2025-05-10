@@ -1,15 +1,11 @@
 package ru.jafix.ct.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.jafix.ct.entity.User;
-import ru.jafix.ct.entity.dto.ExampleDto;
+import ru.jafix.ct.entity.Responsable;
+import ru.jafix.ct.entity.dto.ErrorDto;
 import ru.jafix.ct.entity.dto.UserDto;
 import ru.jafix.ct.service.UserService;
-
-import java.util.UUID;
 
 @RequestMapping("/api" )
 @RestController
@@ -55,11 +51,31 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<Responsable> createUser(@RequestBody UserDto userDto){
         try{
             return ResponseEntity.ok(userService.createUser(userDto));
         }catch (Exception e){
-        return ResponseEntity.badRequest().body(e.getMessage());
+
+
+            return ResponseEntity.badRequest()
+                    .body(ErrorDto.builder()
+                    .errorMsg(e.getMessage())
+                    .build());
     }
 }
+    @PutMapping("/users")
+    public ResponseEntity<Responsable> editeUser(@RequestBody UserDto userDto){
+        try{
+            return ResponseEntity.ok(userService.editUser(userDto));
+        }catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(ErrorDto.builder()
+                            .errorMsg(e.getMessage()).build());
+        }
+    }
+
+//    @GetMapping("/users/{uuid}")
+//    public ResponseEntity<Responsable>(){
+//
+//    }
 }

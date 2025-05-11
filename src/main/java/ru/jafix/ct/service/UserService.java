@@ -78,6 +78,11 @@ public class UserService {
     //удалить пользователя по id
 
     public void deleteById(UUID id) {
-        userRepository.deleteById(id);
+        if(userRepository.existsById(id)){
+            userRepository.deleteById(id);
+        }else {
+            throw new IllegalArgumentException(String.format("Запись с id =%s, не найдена", id));
+        }
+
     }
 }

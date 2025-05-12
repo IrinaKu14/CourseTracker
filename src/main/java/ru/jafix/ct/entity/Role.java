@@ -2,10 +2,7 @@ package ru.jafix.ct.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
@@ -16,6 +13,8 @@ import java.util.UUID;
 @Entity
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="roles")
 public class Role implements GrantedAuthority {
     @Id

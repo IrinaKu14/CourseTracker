@@ -1,6 +1,7 @@
 package ru.jafix.ct.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.jafix.ct.entity.Role;
 import ru.jafix.ct.entity.User;
@@ -16,6 +17,8 @@ import java.util.UUID;
 public class UserService {
     //создать пользователя
     @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
     private UserRepository userRepository;
 
     public UserDto createUser(UserDto userDto) {
@@ -28,7 +31,7 @@ public class UserService {
         User userForCreater = User.builder()
                 .age(userDto.getAge())
                 .login(userDto.getLogin())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(Role.builder()
                         .id(UUID.fromString("c4ae9c45-3509-4424-9c39-0c7c6febcf7a"))
                         .build())

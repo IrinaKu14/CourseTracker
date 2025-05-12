@@ -2,6 +2,7 @@ package ru.jafix.ct.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.jafix.ct.entity.Role;
 import ru.jafix.ct.entity.User;
 import ru.jafix.ct.entity.dto.UserDto;
 import ru.jafix.ct.repository.UserRepository;
@@ -17,16 +18,28 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         if (userDto.getLogin() == null || userDto.getLogin().isEmpty()) {
             throw new IllegalArgumentException("login is required field");
+        }
+        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("password is required field");
         }
         User userForCreater = User.builder()
                 .age(userDto.getAge())
                 .login(userDto.getLogin())
+                .password(userDto.getPassword())
+                .role(Role.builder()
+                        .id(UUID.fromString("c4ae9c45-3509-4424-9c39-0c7c6febcf7a"))
+                        .build())
                 .build();
 
-        return userRepository.save(userForCreater);
+       userForCreater = userRepository.save(userForCreater);
+        return UserDto.builder()
+                .id(userForCreater.getId())
+                .login(userForCreater.getLogin())
+                .age(userForCreater.getAge())
+                .build();
     }
 
     //изменить пользователя

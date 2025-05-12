@@ -58,8 +58,6 @@ public class UserController {
         try{
             return ResponseEntity.ok(userService.createUser(userDto));
         }catch (Exception e){
-
-
             return ResponseEntity.badRequest()
                     .body(ErrorDto.builder()
                     .errorMsg(e.getMessage())

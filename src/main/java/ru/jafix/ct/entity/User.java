@@ -1,9 +1,13 @@
 package ru.jafix.ct.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,25 +18,41 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="users")
-public class User implements Responsable {
+public class User implements UserDetails, Responsable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String login;
-    @Column(name="user_age") //-- переопределение названия колонки в БД
+    private String password;
+    //@Column(name="user_age") //-- переопределение названия колонки в БД
     private int age;
-//    @ManyToOne
+   @ManyToOne
 //    @JoinColumn(name = "role_id")
-//    private Role role;
-    @ManyToMany
-    private List<Role> role;
+   private Role role;
+//    @ManyToMany
+//    private List<Role> roles;
 
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", login='" + login + '\'' +
+//                ", age=" + age +
+//                '}';
+//    }
+    @JsonIgnore
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", age=" + age +
-                '}';
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return password;
+    }
+    @JsonIgnore
+    @Override
+    public String getUsername() {
+        return login;
     }
 }

@@ -1,12 +1,15 @@
 package ru.jafix.ct.controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.jafix.ct.entity.Responsable;
 import ru.jafix.ct.entity.dto.ErrorDto;
 import ru.jafix.ct.entity.dto.SuccessDto;
 import ru.jafix.ct.entity.dto.UserDto;
+import ru.jafix.ct.service.JwtService;
 import ru.jafix.ct.service.UserService;
+
 
 import java.util.UUID;
 
@@ -52,6 +55,23 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
+////    @GetMapping("/jwt")
+////    public ResponseEntity<?> testJwt(@RequestParam(value = "subject") String subject,
+////                                             @RequestParam(value ="authority") String authority){
+////        return ResponseEntity.ok(jwtService.generate(subject,authority));
+////    }
+////
+//
+////    @Autowired
+////    private Environment environment;
+//
+////    @GetMapping("/test")
+////    public void test(){
+////        System.out.println(environment.getProperty("custom.param"));
+////    }
 
     @PostMapping("/users")
     public ResponseEntity<Responsable> createUser(@RequestBody UserDto userDto){

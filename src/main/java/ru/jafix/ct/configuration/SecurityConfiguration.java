@@ -1,13 +1,11 @@
 package ru.jafix.ct.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.jafix.ct.service.UserDetailsServiceImpl;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -34,21 +32,29 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
-                .cors(e -> e.disable())
-                .csrf(e -> e.disable())
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(e -> e
+                        //.requestMatchers(HttpMethod.GET, "/api/jwt").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/users").hasAuthority("admin")
                         .requestMatchers(HttpMethod.PUT, "/api/users").hasAnyAuthority("admin", "teacher")
                         .requestMatchers(HttpMethod.GET, "/api/users").authenticated()
                         .anyRequest().denyAll())
-                //.formLogin(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(AbstractHttpConfigurer::disable)
+                //.formLogin(Customizer.withDefaults())
+                //.formLogin(e -> e.disable())
                 .authenticationProvider(authenticationProvider());
         return http.build();
     }
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public JwtFilter jwtFilter(){
+        return new JwtFilter();
     }
 }

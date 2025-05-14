@@ -8,14 +8,14 @@ import ru.jafix.ct.entity.Role;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class JwtAuthentication implements Authentication {
     private boolean authenticated;
-    private String login;
+    private String email;
     private Role authority;
 
     @Override
@@ -39,7 +39,9 @@ public class JwtAuthentication implements Authentication {
     }
 
     @Override
-    public boolean isAuthenticated() {return authenticated;}
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
@@ -48,6 +50,6 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return "login";
+        return email;
     }
 }

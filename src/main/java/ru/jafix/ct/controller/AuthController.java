@@ -1,11 +1,9 @@
 package ru.jafix.ct.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.jafix.ct.entity.Responsable;
 import ru.jafix.ct.entity.dto.AuthRequestDto;
 import ru.jafix.ct.entity.dto.ErrorDto;
@@ -14,6 +12,8 @@ import ru.jafix.ct.entity.dto.UserDto;
 import ru.jafix.ct.service.AuthService;
 import ru.jafix.ct.service.JwtService;
 import ru.jafix.ct.service.UserService;
+
+import java.util.UUID;
 
 @RequestMapping("/api")
 @RestController
@@ -25,7 +25,7 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/auth")
-    public ResponseEntity<?> createUser(@RequestBody AuthRequestDto authRequestDto){
+    public ResponseEntity<?> createUser(@RequestBody @Valid AuthRequestDto authRequestDto){
         try{
             return ResponseEntity.ok(SuccessDto.builder().msg(authService.auth(authRequestDto)).build());
         }catch (Exception e){
@@ -34,5 +34,19 @@ public class AuthController {
                             .errorMsg(e.getMessage())
                             .build());
         }
+    }
+
+    @GetMapping("/activate/{uuid}")
+    public ResponseEntity<?> activate(@PathVariable("uuid") UUID activateCode){
+        try{
+            authService.activate(activateCode);
+            return ResponseEntity.ok(SuccessDto.builder().msg("Аккаунт активирован").build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(ErrorDto.builder()
+                            .errorMsg(e.getMessage())
+                            .build());
+        }
+
     }
 }

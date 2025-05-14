@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
             Claims claims = jwtService.parseClaims(jwt);
              //Создать объект аутентификации
             JwtAuthentication authentication = JwtAuthentication.builder()
-                    .login(claims.getSubject())
+                    .email(claims.getSubject())
                     .authority(Role.builder()
                             .name(claims.get("role", String.class))
                             .build())

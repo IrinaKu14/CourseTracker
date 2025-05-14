@@ -9,11 +9,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.jafix.ct.entity.Role;
+import ru.jafix.ct.entity.User;
 import ru.jafix.ct.entity.dto.AuthRequestDto;
+import ru.jafix.ct.repository.UserRepository;
 import ru.jafix.ct.service.AuthService;
 import ru.jafix.ct.service.JwtService;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -24,13 +27,30 @@ public class AuthServiceImpl implements AuthService {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public String auth(AuthRequestDto requestDto) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(requestDto.getLogin());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(requestDto.getEmail());
+        if(!userDetails.isEnabled()){
+            throw new AuthenticationServiceException("Аккаунт не активирован");
+        }
         if(!passwordEncoder.matches(requestDto.getPassword(), userDetails.getPassword())){
             throw new AuthenticationServiceException("Неверный пароль");
         }
         Optional<? extends GrantedAuthority> role = userDetails.getAuthorities().stream().findFirst();
         return jwtService.generate(userDetails.getUsername(), role.get().getAuthority());
+    }
+
+    @Override
+    public void activate(UUID activateCode) {
+        User userByCode = userRepository.findByActivateCode(activateCode)
+                .orElseThrow(() -> new IllegalArgumentException("Неверный код активации"));
+
+        userByCode.setActivateCade(null);
+        userByCode.setEnable(true);
+
+        userRepository.save(userByCode);
     }
 }

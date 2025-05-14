@@ -1,18 +1,24 @@
 package ru.jafix.ct.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.jafix.ct.entity.Role;
 import ru.jafix.ct.entity.User;
 import ru.jafix.ct.entity.dto.UserDto;
+import ru.jafix.ct.repository.RoleRepository;
 import ru.jafix.ct.repository.UserRepository;
+import ru.jafix.ct.service.MailService;
 import ru.jafix.ct.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+@Slf4j
 @Service
 
 public class UserServiceImpl implements UserService {
@@ -20,30 +26,58 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        if (userDto.getLogin() == null || userDto.getLogin().isEmpty()) {
-            throw new IllegalArgumentException("login is required field");
+        Optional<User> optUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (optUser.isPresent()) {
+            throw new IllegalArgumentException("Пользователь с таким email уже существует");
         }
-        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("password is required field");
-        }
-        User userForCreater = User.builder()
+
+//        Optional<Role> optRole = roleRepository.findByName(Constants.Roles.STUDENT);
+//
+//        if (optRole.isEmpty()) {
+//            throw new IllegalArgumentException("CT-1: обратитесь к администратору");
+//        }
+
+        User userForCreate = User.builder()
                 .age(userDto.getAge())
-                .login(userDto.getLogin())
+                .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .role(Role.builder()
-                        .id(UUID.fromString("c4ae9c45-3509-4424-9c39-0c7c6febcf7a"))
-                        .build())
+                .enable(true) //TODO: поменять на false в продуктивной среде
+                .activateCade(UUID.randomUUID())
+               // .role(optRole.get())
                 .build();
 
-       userForCreater = userRepository.save(userForCreater);
+
+        userForCreate = userRepository.save(userForCreate);
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        String email = userForCreate.getEmail();
+        UUID activateCode = userForCreate.getActivateCade();
+        executorService.execute(()-> {
+            try{
+                mailService.send(email, "Активация аккаунта",
+                        "Для активации перейдите по ссылке: " +
+                        "http://localhost:8080/api/activate" + activateCode);
+            }catch (Exception e){
+                log.error("Не получилось отправить код активации на email: {}", email);
+            }finally {
+                executorService.shutdown();
+            }
+        });
+
         return UserDto.builder()
-                .id(userForCreater.getId())
-                .login(userForCreater.getLogin())
-                .age(userForCreater.getAge())
+                .id(userForCreate.getId())
+                .email(userForCreate.getEmail())
+                .age(userForCreate.getAge())
                 .build();
     }
 
@@ -57,7 +91,7 @@ public class UserServiceImpl implements UserService {
         User userForCreater = User.builder()
                 .id(userDto.getId())
                 .age(userDto.getAge())
-                .login(userDto.getLogin())
+                .email(userDto.getEmail())
                 .build();
 
         return userRepository.save(userForCreater);
@@ -80,10 +114,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Пользовател с таким id не существует"));
     }
-//получить пользователя по login
+
+
+
+    //получить пользователя по login
     @Override
-    public User findUserByLogin(String login) {
-        Optional<User> userOptional = userRepository.findByLogin(login);
+    public User findUserByEmail(String login) {
+        Optional<User> userOptional = userRepository.findByEmail(login);
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException("Пользовател с таким login не существует");
         }

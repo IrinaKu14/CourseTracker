@@ -10,4 +10,9 @@ import ru.jafix.ct.entity.Responsable;
 @Builder
 public class ErrorDto implements Responsable {
     private String errorMsg;
+
+    @Override
+    public boolean isEnable() {
+        return false;
+    }
 }

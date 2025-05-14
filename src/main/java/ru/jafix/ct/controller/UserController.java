@@ -1,4 +1,5 @@
 package ru.jafix.ct.controller;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +75,7 @@ public class UserController {
 ////    }
 
     @PostMapping("/users")
-    public ResponseEntity<Responsable> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<Responsable> createUser(@RequestBody @Valid UserDto userDto){
         try{
             return ResponseEntity.ok(userService.createUser(userDto));
         }catch (Exception e){
@@ -96,23 +97,22 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> findByIdOrLogin(@RequestParam(value = "userId", required = false) UUID userId,
-                                             @RequestParam(value ="login", required = false) String login){
-
-        try{
-            if(userId !=null && login !=null){
+    public ResponseEntity<?> findByIdOrEmail(@RequestParam(value = "userId", required = false) UUID userId,
+                                             @RequestParam(value = "email", required = false) String email) {
+        try {
+            if (userId != null && email != null) {
                 throw new IllegalArgumentException("Ambigous parameters");
-            } else if (userId ==null && login ==null) {
+            } else if (userId == null && email == null) {
                 return ResponseEntity.ok(userService.findAllUsers());
-            } else if (userId !=null) {
+            } else if (userId != null) {
                 return ResponseEntity.ok(userService.findUserById(userId));
             } else {
-                return ResponseEntity.ok(userService.findUserByLogin(login));
+                return ResponseEntity.ok(userService.findUserByEmail(email));
             }
-        }catch (Exception e){
-            return ResponseEntity.badRequest()
-                    .body(ErrorDto.builder()
-                            .errorMsg(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ErrorDto.builder()
+                    .errorMsg(e.getMessage())
+                    .build());
         }
     }
     @DeleteMapping("/users/{id}")

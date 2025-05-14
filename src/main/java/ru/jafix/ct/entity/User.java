@@ -22,7 +22,7 @@ public class User implements UserDetails, Responsable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String login;
+    private String email;
     private String password;
     //@Column(name="user_age") //-- переопределение названия колонки в БД
     private int age;
@@ -40,6 +40,10 @@ public class User implements UserDetails, Responsable {
 //                ", age=" + age +
 //                '}';
 //    }
+    @Column(name="activate_code")
+    private UUID activateCade;
+    private Boolean enable;
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,6 +57,10 @@ public class User implements UserDetails, Responsable {
     @JsonIgnore
     @Override
     public String getUsername() {
-        return login;
+        return email;
+    }
+    @Override
+    public boolean isEnable(){
+        return enable;
     }
 }

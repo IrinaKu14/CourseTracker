@@ -10,4 +10,9 @@ import ru.jafix.ct.entity.Responsable;
 @Builder
 public class SuccessDto implements Responsable {
     private String msg;
+
+    @Override
+    public boolean isEnable() {
+        return false;
+    }
 }

@@ -27,8 +27,5 @@ public class UserDto implements Responsable {
     private String password;
     private int age;
 
-    @Override
-    public boolean isEnable() {
-        return false;
-    }
+
 }

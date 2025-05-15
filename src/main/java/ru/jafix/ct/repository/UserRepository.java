@@ -1,6 +1,6 @@
 package ru.jafix.ct.repository;
 
-import org.springframework.data.domain.Example;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,11 +19,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 
     List<User> findByAgeGreaterThan(int age);
+
 //    @Query(value = "SELECT * FROM users u WHERE u.user_age <?1 AND u.login like ?2", nativeQuery = true)
 //    List<User> findByLoginStartsWithLitterAndAgeBefore(@Param("maxAge") int maxAge,@Param("liter") String liter);
 
-    @Query(value = "SELECT u FROM User u WHERE u.age < :maxAge AND u.login like :liter")
-    List<User> findByLoginStartsWithLitterAndAgeBefore(@Param("maxAge") int maxAge,@Param("liter") String liter);
+    @Query(value = "SELECT u FROM User u WHERE u.role.name = 'user'")
+    List<User> findByRoleUser();
 
-
+    @Query(value = "SELECT u FROM User u WHERE u.age < :maxAge AND u.email like :liter")
+    List<User> findByEmailStartsWithLitterAndAgeBefore(@Param("maxAge") int maxAge, @Param("liter") String liter);
 }

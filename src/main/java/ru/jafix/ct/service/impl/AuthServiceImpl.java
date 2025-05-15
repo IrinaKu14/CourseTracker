@@ -48,8 +48,8 @@ public class AuthServiceImpl implements AuthService {
         User userByCode = userRepository.findByActivateCode(activateCode)
                 .orElseThrow(() -> new IllegalArgumentException("Неверный код активации"));
 
-        userByCode.setActivateCade(null);
-        userByCode.setEnable(true);
+        userByCode.setActivateCode(null);
+        userByCode.setEnabled(true);
 
         userRepository.save(userByCode);
     }

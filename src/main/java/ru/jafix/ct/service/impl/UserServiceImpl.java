@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
                 .age(userDto.getAge())
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .enable(true) //TODO: поменять на false в продуктивной среде
-                .activateCade(UUID.randomUUID())
+                .enabled(false) //TODO: поменять на false в продуктивной среде
+                .activateCode(UUID.randomUUID())
                // .role(optRole.get())
                 .build();
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         String email = userForCreate.getEmail();
-        UUID activateCode = userForCreate.getActivateCade();
+        UUID activateCode = userForCreate.getActivateCode();
         executorService.execute(()-> {
             try{
                 mailService.send(email, "Активация аккаунта",
@@ -119,10 +119,10 @@ public class UserServiceImpl implements UserService {
 
     //получить пользователя по login
     @Override
-    public User findUserByEmail(String login) {
-        Optional<User> userOptional = userRepository.findByEmail(login);
+    public User findUserByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("Пользовател с таким login не существует");
+            throw new IllegalArgumentException("Пользовател с таким email не существует");
         }
 
         return userOptional.get();

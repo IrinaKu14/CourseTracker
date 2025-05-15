@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
+
 @Getter
 @Setter
 @Entity
@@ -41,8 +43,8 @@ public class User implements UserDetails, Responsable {
 //                '}';
 //    }
     @Column(name="activate_code")
-    private UUID activateCade;
-    private Boolean enable;
+    private UUID activateCode;
+    private Boolean enabled;
 
     @JsonIgnore
     @Override
@@ -59,8 +61,9 @@ public class User implements UserDetails, Responsable {
     public String getUsername() {
         return email;
     }
+
     @Override
-    public boolean isEnable(){
-        return enable;
+    public boolean isEnabled() {
+        return enabled;
     }
 }

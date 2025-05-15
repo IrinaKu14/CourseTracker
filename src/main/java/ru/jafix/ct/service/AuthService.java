@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface AuthService {
     String auth(AuthRequestDto requestDto);
-    void activate(UUID activateCade);
+    void activate(UUID activateCode);
 }

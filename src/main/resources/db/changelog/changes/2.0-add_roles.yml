@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: kutlatovaiv
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: e7a4abcd-c3c4-4ee1-a4ab-cdc3c52ee1b7
+              - column:
+                  name: name
+                  value: ADMIN
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: cb043fb4-8d60-4bb6-983f-b48d601bb6b1
+              - column:
+                  name: name
+                  value: TEACHER
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: b82ebe5c-e0ed-4f31-aebe-5ce0ed8f76f9
+              - column:
+                  name: name
+                  value: STUDENT
+
+

@@ -11,6 +11,9 @@ spring:
     password: postgres
     url: jdbc:postgresql://localhost:5432/ct1
     username: postgres
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yml
   mail:
     host: smtp.mail.ru
     port: 465

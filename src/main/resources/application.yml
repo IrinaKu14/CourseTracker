@@ -5,11 +5,11 @@ spring:
         show_sql: true
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   datasource:
     driver-class-name: org.postgresql.Driver
     password: postgres
-    url: jdbc:postgresql://localhost:5432/ct
+    url: jdbc:postgresql://localhost:5432/ct1
     username: postgres
   mail:
     host: smtp.mail.ru

@@ -31,6 +31,7 @@ public class User implements UserDetails, Responsable {
    @ManyToOne
 //    @JoinColumn(name = "role_id")
    private Role role;
+
 //    @ManyToMany
 //    private List<Role> roles;
 

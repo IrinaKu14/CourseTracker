@@ -35,6 +35,8 @@ public class SecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(e -> e
+                        .requestMatchers(HttpMethod.GET, "/api/download/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/file/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/test/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/activate/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()

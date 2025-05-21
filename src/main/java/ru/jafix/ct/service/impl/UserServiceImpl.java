@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.jafix.ct.configuration.Constants;
 import ru.jafix.ct.entity.Role;
 import ru.jafix.ct.entity.User;
 import ru.jafix.ct.entity.dto.UserDto;
@@ -35,24 +36,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        Optional<User> optUser = userRepository.findByEmail(userDto.getEmail());
-
-        if (optUser.isPresent()) {
-            throw new IllegalArgumentException("Пользователь с таким email уже существует");
-        }
-
-//        Optional<Role> optRole = roleRepository.findByName(Constants.Roles.STUDENT);
+//        Optional<User> optUser = userRepository.findByEmail(userDto.getEmail());
 //
-//        if (optRole.isEmpty()) {
-//            throw new IllegalArgumentException("CT-1: обратитесь к администратору");
+//        if (optUser.isPresent()) {
+//            throw new IllegalArgumentException("Пользователь с таким email уже существует");
 //        }
+
+        Optional<Role> optRole = roleRepository.findByName(Constants.Roles.STUDENT);
+
+        if (optRole.isEmpty()) {
+            throw new IllegalArgumentException("CT-1: обратитесь к администратору");
+        }
 
         User userForCreate = User.builder()
                 .age(userDto.getAge())
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .enabled(false) //TODO: поменять на false в продуктивной среде
+                .enabled(true) //TODO: поменять на false в продуктивной среде
                 .activateCode(UUID.randomUUID())
+                .role(optRole.get())
                // .role(optRole.get())
                 .build();
 

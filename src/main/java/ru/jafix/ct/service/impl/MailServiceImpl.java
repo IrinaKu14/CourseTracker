@@ -24,7 +24,7 @@ public class MailServiceImpl implements MailService {
         message.setSubject(subject);
         message.setText(content);
 
-        mailSender.send(message);
+        //mailSender.send(message);//TODO временно отключен
 
     }
 }

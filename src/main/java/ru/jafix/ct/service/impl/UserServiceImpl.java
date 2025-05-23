@@ -36,11 +36,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-//        Optional<User> optUser = userRepository.findByEmail(userDto.getEmail());
-//
-//        if (optUser.isPresent()) {
-//            throw new IllegalArgumentException("Пользователь с таким email уже существует");
-//        }
+        Optional<User> optUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (optUser.isPresent()) {
+            throw new IllegalArgumentException("Пользователь с таким email уже существует");
+        }
 
         Optional<Role> optRole = roleRepository.findByName(Constants.Roles.STUDENT);
 

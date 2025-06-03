@@ -9,12 +9,29 @@ import ru.jafix.ct.service.JwtService;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
+import java.util.Date;
 
 @Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${jwt.lifetime}")
+    private Long lifetime;
+
+    @Override
+    public String generate(String subject, String authority) {
+        Date now = new Date();
+        Date expDate = new Date(now.getTime() + lifetime);
+
+        return Jwts.builder()
+                .subject(subject)
+                .issuedAt(now)
+                .expiration(expDate)
+                .claim("role", authority)
+                .signWith(getSecretKey(), Jwts.SIG.HS512)
+                .compact();
+    }
 
     @Override
     public Claims validateAndParseClaims(String jwt) {

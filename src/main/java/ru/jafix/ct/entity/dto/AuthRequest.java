@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-@SuppressWarnings("unused")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SuppressWarnings({"unused"})
 public class AuthRequest {
     @NotBlank(message = "Email не должен быть пустым")
     private String email;

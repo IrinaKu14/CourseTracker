@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: auth-microservice
   jpa:
     properties:
       hibernate:
@@ -28,8 +30,7 @@ spring:
           auth: true
           starttls:
             enable: true
-  application:
-    name: coursetracker
+
 
 jwt:
   secret: G4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0G4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0
@@ -43,5 +44,5 @@ logging:
     org.springframework.security: INFO
 
 
-#server:
-#  port: 3333
+server:
+  port: 8081

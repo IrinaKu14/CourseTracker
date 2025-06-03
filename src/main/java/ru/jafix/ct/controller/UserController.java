@@ -14,7 +14,7 @@ import ru.jafix.ct.service.UserService;
 
 import java.util.UUID;
 
-@RequestMapping("/api" )
+@RequestMapping("/api/users" )
 @RestController
 public class UserController {
 //    //@RequestMapping(method = RequestMethod.GET,path = "/test" )
@@ -74,7 +74,7 @@ public class UserController {
 ////        System.out.println(environment.getProperty("custom.param"));
 ////    }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<Responsable> createUser(@RequestBody @Valid UserDto userDto){
         try{
             return ResponseEntity.ok(userService.createUser(userDto));
@@ -85,7 +85,7 @@ public class UserController {
                     .build());
     }
 }
-    @PutMapping("/users")
+    @PutMapping
     public ResponseEntity<Responsable> editeUser(@RequestBody UserDto userDto){
         try{
             return ResponseEntity.ok(userService.editUser(userDto));
@@ -96,7 +96,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<?> findByIdOrEmail(@RequestParam(value = "userId", required = false) UUID userId,
                                              @RequestParam(value = "email", required = false) String email) {
         try {
@@ -115,7 +115,7 @@ public class UserController {
                     .build());
         }
     }
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
    public ResponseEntity<Responsable> deleteById(@PathVariable("id") UUID id){
         try{
             userService.deleteById(id);

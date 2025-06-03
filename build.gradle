@@ -2,26 +2,12 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
-
-}
-
-group = 'ru.jafix'
-version = '0.0.1-SNAPSHOT'
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
 }
 
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-}
-
-repositories {
-	mavenCentral()
 }
 
 dependencies {
@@ -31,16 +17,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	implementation 'org.springframework.kafka:spring-kafka'
 
-	//implementation 'org.flywaydb:flyway-core:11.0.1'
-	//runtimeOnly 'org.flywaydb:flyway-database-postgresql:11.0.1'
 	implementation 'org.liquibase:liquibase-core:4.31.1'
-
-	/* Шаблонизтор */
-	implementation 'org.thymeleaf:thymeleaf'
-	implementation 'org.thymeleaf:thymeleaf-spring6'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
 
 	implementation 'org.apache.commons:commons-lang3:3.17.0'
 	implementation 'org.apache.poi:poi:5.4.1'

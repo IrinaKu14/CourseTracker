@@ -3,7 +3,6 @@ package ru.jafix.ct.entity.dto;
 import lombok.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import ru.jafix.ct.entity.Role;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +15,8 @@ import java.util.List;
 public class JwtAuthentication implements Authentication {
     private boolean authenticated;
     private String email;
-    private Role authority;
+    private RoleDto authority;
+    private String token;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

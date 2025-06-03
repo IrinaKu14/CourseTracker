@@ -4,7 +4,7 @@ databaseChangeLog:
       author: kutlatovaiv
       changes:
         - createTable:
-            tableName: roles
+            tableName: courses
             columns:
               - column:
                   name: id
@@ -15,9 +15,12 @@ databaseChangeLog:
               - column:
                   name: name
                   type: VARCHAR(250)
+              - column:
+                  name: time
+                  type: INTEGER
 
         - createTable:
-            tableName: users
+            tableName: members
             columns:
               - column:
                   name: id
@@ -26,27 +29,15 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: email
-                  type: VARCHAR(320)
-              - column:
-                  name: password
-                  type: VARCHAR(20)
-              - column:
-                  name: age
-                  type: INTEGER
-              - column:
-                  name: role_id
+                  name: user_id
                   type: UUID
               - column:
-                  name: activate_code
+                  name: course_id
                   type: UUID
-              - column:
-                  name: enabled
-                  type: bool
 
         - addForeignKeyConstraint:
-            baseTableName: users
-            baseColumnNames: role_id
-            constraintName: fk_users_roles
-            referencedTableName: roles
+            baseTableName: members
+            baseColumnNames: course_id
+            constraintName: fk_members_courses
+            referencedTableName: courses
             referencedColumnNames: id

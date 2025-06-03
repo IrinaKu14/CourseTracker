@@ -1,31 +1,47 @@
 package ru.jafix.ct.entity.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
-import ru.jafix.ct.entity.Responsable;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-@ToString
 @Builder
-public class UserDto implements Responsable {
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto implements UserDetails {
     private UUID id;
-    @NotBlank(message = "Email не должен быть пустым")
     private String email;
-    @NotBlank(message = "Пароль не должен быть пустым")
-    @Length(min = 8, max = 20, message = "Длина пароля от 8 до 20 символов")
     private String password;
     private int age;
+    private RoleDto role;
+    private UUID activateCode;
+    private Boolean enabled;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

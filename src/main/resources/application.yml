@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: course-microservice
   jpa:
     properties:
       hibernate:
@@ -9,39 +11,18 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: postgres
-    url: jdbc:postgresql://localhost:5432/ct1
+    url: jdbc:postgresql://localhost:5432/ct1courses
     username: postgres
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yml
-  mail:
-    host: smtp.mail.ru
-    port: 465
-    username:
-    password:
-    properties:
-      mail:
-        debug: true
-        smtp:
-          ssl:
-            enable: true
-          auth: true
-          starttls:
-            enable: true
-  application:
-    name: coursetracker
+
 
 jwt:
   secret: G4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0G4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0
-  lifetime: 450000
+#  lifetime: 450000
 #custom:
 #  param: Hello world
 
-logging:
-  level:
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-
-
-#server:
-#  port: 3333
+server:
+  port: 8082

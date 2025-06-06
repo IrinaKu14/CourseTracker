@@ -1,0 +1,5 @@
+rootProject.name = "coursetracker"
+
+include 'gateway'
+include 'auth-microservice'
+include 'course-microservice'
